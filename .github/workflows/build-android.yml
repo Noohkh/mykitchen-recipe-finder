@@ -130,6 +130,11 @@ jobs:
       run: |
         cordova platform add android@14.0.1 --no-telemetry
         
+    - name: Remove any auto-added plugins that cause issues
+      run: |
+        # Remove any plugins that might have been auto-added and cause compilation issues
+        cordova plugin list | grep -E "whitelist|device|statusbar|dialogs|inappbrowser|network-information|splashscreen" | awk '{print $1}' | xargs -r -I {} cordova plugin remove {} || true
+        
     - name: Configure Gradle for Cordova
       run: |
         # Create the Gradle configuration file for proper build
@@ -150,8 +155,9 @@ jobs:
         
     - name: Install plugins
       run: |
-        # Only add essential plugins to avoid conflicts
-        cordova plugin add cordova-plugin-whitelist --no-telemetry
+        # Skip whitelist plugin due to compatibility issues with newer Cordova versions
+        # Whitelist functionality is now handled by Content Security Policy in HTML
+        echo "Skipping plugins to avoid compatibility issues"
 
     - name: Build debug APK
       if: github.event.inputs.build_type == 'debug' || github.event.inputs.build_type == ''
