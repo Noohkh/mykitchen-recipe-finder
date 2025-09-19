@@ -84,11 +84,28 @@ jobs:
         mkdir -p platforms
         mkdir -p plugins
         
-        # Ensure www directory exists with content
-        if [ ! -d www ] || [ ! -f www/index.html ]; then
-          echo "Error: www/index.html not found"
+        # Handle different project structures
+        if [ -d www ] && [ -f www/index.html ]; then
+          echo "✅ Standard Cordova structure found: www/index.html exists"
+        elif [ -d frontend ] && [ -f frontend/index.html ]; then
+          echo "📁 Converting frontend structure to Cordova www structure"
+          # Copy frontend content to www directory
+          cp -r frontend www
+          echo "✅ Copied frontend/ to www/"
+        else
+          echo "❌ Error: No index.html found in www/ or frontend/"
+          echo "Available directories:"
+          ls -la
           exit 1
         fi
+        
+        # Verify www/index.html exists after setup
+        if [ ! -f www/index.html ]; then
+          echo "❌ Error: www/index.html still not found after setup"
+          exit 1
+        fi
+        
+        echo "✅ Cordova project structure ready"
 
     - name: Add Android platform
       run: |
