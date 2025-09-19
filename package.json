@@ -36,18 +36,16 @@
   },
   "devDependencies": {
     "cordova": "^11.0.0",
-    "cordova-android": "^11.0.0",
+    "cordova-android": "^14.0.1",
     "cordova-ios": "^6.3.0",
     "nodemon": "^2.0.20"
   },
   "cordova": {
     "platforms": [
-      "android",
-      "ios"
+      "ios",
+      "android"
     ],
-    "plugins": {
-      "cordova-plugin-whitelist": {}
-    }
+    "plugins": {}
   },
   "engines": {
     "node": ">=14.0.0"
