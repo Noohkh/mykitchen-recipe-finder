@@ -106,14 +106,25 @@
     #logout-btn:hover { background: rgba(255,255,255,0.3); }
     
     /* AdMob Ad Styling */
-    .ad-container { margin: 15px 10px; padding: 10px; background: #f9f9f9; border-radius: 10px; text-align: center; }
+    .ad-container { margin: 10px; padding: 8px; background: #f8f8f8; border-radius: 8px; text-align: center; border: 1px solid #e0e0e0; }
     .ad-container ins { display: block !important; min-height: 50px; }
     
     /* Interstitial Ad Overlay */
     .interstitial-ad { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; }
-    .interstitial-content { background: white; padding: 20px; border-radius: 15px; max-width: 90%; max-height: 80%; text-align: center; position: relative; }
-    .close-ad { position: absolute; top: 10px; right: 15px; background: #ff7043; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold; }
+    .interstitial-content { background: white; padding: 20px; border-radius: 15px; max-width: 90%; max-height: 80%; text-align: center; position: relative; overflow: hidden; }
+    .close-ad { position: absolute; top: 10px; right: 15px; background: #ff7043; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-weight: bold; z-index: 2001; }
     .close-ad:hover { background: #e64a19; }
+    .ad-skip-timer { position: absolute; top: 10px; left: 15px; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; z-index: 2001; }
+    
+    /* App Open Ad Overlay */
+    .app-open-ad { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #ff7043, #ff5722); z-index: 3000; display: none; align-items: center; justify-content: center; }
+    .app-open-content { background: white; padding: 30px; border-radius: 20px; max-width: 95%; max-height: 90%; text-align: center; position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+    .app-open-header { margin-bottom: 20px; }
+    .app-open-title { color: #ff7043; font-size: 24px; font-weight: bold; margin: 10px 0; }
+    .app-open-subtitle { color: #666; font-size: 14px; margin-bottom: 15px; }
+    .app-open-close { position: absolute; top: 15px; right: 20px; background: #ff7043; color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; font-weight: bold; font-size: 18px; z-index: 3001; }
+    .app-open-close:hover { background: #e64a19; }
+    .app-open-timer { position: absolute; top: 15px; left: 20px; background: rgba(0,0,0,0.7); color: white; padding: 8px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; z-index: 3001; }
     
     header { background: #ff7043; color: white; padding: 20px 15px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     header h1 { margin: 0; font-size: 24px; font-weight: 600; }
@@ -148,18 +159,22 @@
       #recipe-detail { margin: 10px; padding: 15px; }
       header h1 { font-size: 20px; }
       #search-box { padding: 10px; }
+      .ad-container { margin: 8px 5px; padding: 5px; }
     }
     
     @media (max-width: 480px) {
-      #recipes { grid-template-columns: 1fr; gap: 15px; }
+      #recipes { grid-template-columns: 1fr; gap: 15px; padding: 10px 5px; }
       .card img { height: 180px; }
       #search-box input { font-size: 16px; /* Prevents zoom on iOS */ }
+      #search-box { padding: 8px; }
+      .search-section { padding-bottom: 5px; }
+      .ad-container { margin: 5px 2px; padding: 3px; }
     }
   </style>
 </head>
 <body>
-  <!-- Google AdSense/AdMob Script -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  <!-- Google AdMob SDK -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-3603600033188923" crossorigin="anonymous"></script>
   
   <!-- Firebase SDK -->
   <script type="module">
@@ -242,30 +257,20 @@
         <button id="search-btn" aria-label="Search recipes">Search</button>
         <div id="search-help" class="sr-only">Type a recipe name, ingredient, or cuisine to find recipes</div>
       </div>
-
-      <!-- Top Banner Ad -->
-      <div class="ad-container" id="top-banner-ad" aria-label="Advertisement">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-XXXXXXXXXXXXXXXXXX"
-             data-ad-slot="XXXXXXXXXX"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
     </section>
+
+    <!-- AdMob Banner Ad -->
+    <div class="ad-container" id="banner-ad" aria-label="Advertisement">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-app-pub-3603600033188923"
+           data-ad-slot="9680941403"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+    </div>
 
     <section class="recipes-section" aria-label="Recipe results">
       <div id="recipes" role="grid" aria-label="Recipe cards"></div>
-      
-      <!-- Middle Banner Ad -->
-      <div class="ad-container" id="middle-banner-ad" style="display: none;" aria-label="Advertisement">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-XXXXXXXXXXXXXXXXXX"
-             data-ad-slot="XXXXXXXXXX"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
       
       <div id="recipe-detail" role="article" aria-label="Recipe details"></div>
     </section>
@@ -275,12 +280,31 @@
   <!-- Interstitial Ad Modal -->
   <div class="interstitial-ad" id="interstitial-ad">
     <div class="interstitial-content">
-      <button class="close-ad" onclick="closeInterstitialAd()">&times;</button>
-      <h3>🍳 Enjoy More Recipes!</h3>
+      <div class="ad-skip-timer" id="ad-timer">Ad 5s</div>
+      <button class="close-ad" id="close-ad-btn" onclick="closeInterstitialAd()" style="display: none;">&times;</button>
       <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-XXXXXXXXXXXXXXXXXX"
-           data-ad-slot="XXXXXXXXXX"
+           style="display:block; width: 100%; height: 400px;"
+           data-ad-client="ca-app-pub-3603600033188923"
+           data-ad-slot="1818709359"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+    </div>
+  </div>
+
+  <!-- App Open Ad Modal -->
+  <div class="app-open-ad" id="app-open-ad">
+    <div class="app-open-content">
+      <div class="app-open-timer" id="app-open-timer">Loading 4s</div>
+      <button class="app-open-close" id="app-open-close-btn" onclick="closeAppOpenAd()" style="display: none;">&times;</button>
+      <div class="app-open-header">
+        <div style="font-size: 48px; margin-bottom: 10px;">🍳</div>
+        <div class="app-open-title">Welcome to MyKitchen!</div>
+        <div class="app-open-subtitle">Discover amazing recipes from around the world</div>
+      </div>
+      <ins class="adsbygoogle"
+           style="display:block; width: 100%; height: 300px;"
+           data-ad-client="ca-app-pub-3603600033188923"
+           data-ad-slot="3782527718"
            data-ad-format="auto"
            data-full-width-responsive="true"></ins>
     </div>
@@ -318,12 +342,13 @@
       // Monitor authentication state
       window.onAuthStateChanged(window.firebaseAuth, (user) => {
         if (user) {
-          // User is signed in
-          showMainApp(user.email.split('@')[0]); // Use email prefix as display name
+          // User is signed in - show main app with app open ad
+          showMainAppWithAd(user.email.split('@')[0]); // Use email prefix as display name
         } else {
           // User is signed out
           mainApp.style.display = 'none';
           loginModal.style.display = 'flex';
+          hasShownAppOpenAd = false; // Reset for next login
         }
       });
 
@@ -394,46 +419,145 @@
         categories.forEach(cat => fetchByCategory(cat));
         cuisines.forEach(cuisine => loadCuisineOnInit(cuisine));
         
-        // Initialize ads after content loads
-        initializeAds();
+        // Initialize AdMob after content loads
+        setTimeout(initializeAdMob, 1000);
       }
       
-      // AdMob Integration Functions
-      function initializeAds() {
-        // Load banner ads
+      // AdMob Initialization
+      function initializeAdMob() {
         try {
+          // Initialize the banner ad
           (adsbygoogle = window.adsbygoogle || []).push({});
-          // Show middle banner after some recipes are loaded
-          setTimeout(() => {
-            document.getElementById('middle-banner-ad').style.display = 'block';
-            (adsbygoogle = window.adsbygoogle || []).push({});
-          }, 3000);
-        } catch (e) {
-          console.log('AdSense not loaded');
+          console.log('AdMob banner ad initialized');
+        } catch (error) {
+          console.log('AdMob initialization error:', error);
         }
       }
       
-      // Show interstitial ad periodically
+      // Interstitial Ad Management
       let recipeViewCount = 0;
+      let adTimer = 5;
+      let timerInterval;
+      
       function showInterstitialAd() {
         recipeViewCount++;
         if (recipeViewCount % 3 === 0) { // Show every 3rd recipe view
-          document.getElementById('interstitial-ad').style.display = 'flex';
+          const interstitialAd = document.getElementById('interstitial-ad');
+          const adTimerElement = document.getElementById('ad-timer');
+          const closeBtn = document.getElementById('close-ad-btn');
+          
+          // Reset timer
+          adTimer = 5;
+          adTimerElement.textContent = `Ad ${adTimer}s`;
+          closeBtn.style.display = 'none';
+          
+          // Show the ad
+          interstitialAd.style.display = 'flex';
+          
+          // Start countdown timer
+          timerInterval = setInterval(() => {
+            adTimer--;
+            adTimerElement.textContent = `Ad ${adTimer}s`;
+            
+            if (adTimer <= 0) {
+              clearInterval(timerInterval);
+              adTimerElement.style.display = 'none';
+              closeBtn.style.display = 'block';
+            }
+          }, 1000);
+          
+          // Initialize the interstitial ad
           try {
             (adsbygoogle = window.adsbygoogle || []).push({});
-          } catch (e) {
-            console.log('AdSense not loaded');
+          } catch (error) {
+            console.log('Interstitial ad initialization error:', error);
           }
         }
       }
       
       // Global function to close interstitial ad
       window.closeInterstitialAd = function() {
-        document.getElementById('interstitial-ad').style.display = 'none';
+        const interstitialAd = document.getElementById('interstitial-ad');
+        const adTimerElement = document.getElementById('ad-timer');
+        const closeBtn = document.getElementById('close-ad-btn');
+        
+        clearInterval(timerInterval);
+        interstitialAd.style.display = 'none';
+        adTimerElement.style.display = 'block';
+        closeBtn.style.display = 'none';
       }
       
       // Make showInterstitialAd globally available
       window.showInterstitialAd = showInterstitialAd;
+      
+      // App Open Ad Management
+      let appOpenTimer = 4;
+      let appOpenTimerInterval;
+      let hasShownAppOpenAd = false;
+      
+      function showAppOpenAd() {
+        if (hasShownAppOpenAd) return; // Only show once per session
+        
+        const appOpenAd = document.getElementById('app-open-ad');
+        const appOpenTimerElement = document.getElementById('app-open-timer');
+        const appOpenCloseBtn = document.getElementById('app-open-close-btn');
+        
+        // Reset timer
+        appOpenTimer = 4;
+        appOpenTimerElement.textContent = `Loading ${appOpenTimer}s`;
+        appOpenCloseBtn.style.display = 'none';
+        
+        // Show the ad
+        appOpenAd.style.display = 'flex';
+        hasShownAppOpenAd = true;
+        
+        // Start countdown timer
+        appOpenTimerInterval = setInterval(() => {
+          appOpenTimer--;
+          if (appOpenTimer > 0) {
+            appOpenTimerElement.textContent = `Loading ${appOpenTimer}s`;
+          } else {
+            clearInterval(appOpenTimerInterval);
+            appOpenTimerElement.textContent = 'Ready!';
+            appOpenCloseBtn.style.display = 'block';
+            
+            // Auto-close after 2 more seconds
+            setTimeout(() => {
+              if (appOpenAd.style.display !== 'none') {
+                closeAppOpenAd();
+              }
+            }, 2000);
+          }
+        }, 1000);
+        
+        // Initialize the app open ad
+        try {
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (error) {
+          console.log('App Open ad initialization error:', error);
+        }
+      }
+      
+      // Global function to close app open ad
+      window.closeAppOpenAd = function() {
+        const appOpenAd = document.getElementById('app-open-ad');
+        const appOpenTimerElement = document.getElementById('app-open-timer');
+        const appOpenCloseBtn = document.getElementById('app-open-close-btn');
+        
+        clearInterval(appOpenTimerInterval);
+        appOpenAd.style.display = 'none';
+        appOpenCloseBtn.style.display = 'none';
+      }
+      
+      // Show app open ad when user logs in successfully
+      function showMainAppWithAd(username) {
+        showMainApp(username);
+        
+        // Show app open ad after a short delay
+        setTimeout(() => {
+          showAppOpenAd();
+        }, 500);
+      }
       
       // Small password visibility toggle function
       window.togglePassword = function(inputId) {
