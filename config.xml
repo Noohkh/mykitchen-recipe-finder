@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.mykitchen.recipefinder" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name>MyKitchen Recipe Finder</name>
+    <description>
+        Discover thousands of delicious recipes from around the world. Search Indian, Italian, Mexican, Chinese cuisines and more with step-by-step cooking instructions.
+    </description>
+    <author email="dev@mykitchen.com" href="https://mykitchen.com">
+        MyKitchen Team
+    </author>
+    
+    <!-- Content source -->
+    <content src="index.html" />
+    
+    <!-- Preferences -->
+    <preference name="permissions" value="none" />
+    <preference name="orientation" value="default" />
+    <preference name="target-device" value="universal" />
+    <preference name="fullscreen" value="true" />
+    <preference name="webviewbounce" value="false" />
+    <preference name="prerendered-icon" value="true" />
+    <preference name="stay-in-webview" value="false" />
+    <preference name="ios-statusbarstyle" value="black-opaque" />
+    <preference name="detect-data-types" value="true" />
+    <preference name="exit-on-suspend" value="false" />
+    <preference name="auto-hide-splash-screen" value="true" />
+    <preference name="disable-cursor" value="false" />
+    <preference name="android-minSdkVersion" value="19" />
+    <preference name="android-targetSdkVersion" value="33" />
+    <preference name="android-installLocation" value="auto" />
+    
+    <!-- Universal Access -->
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    
+    <!-- Platform specific settings -->
+    <platform name="android">
+        <allow-intent href="market:*" />
+    </platform>
+    
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+    
+    <!-- Plugins - minimal set for browser compatibility -->
+    <!-- Removed problematic plugins that cause browser errors -->
+    
+    <!-- Content Security Policy -->
+    <meta-data android:name="android.webkit.WebView.MetricsOptOut" android:value="true" />
+</widget>

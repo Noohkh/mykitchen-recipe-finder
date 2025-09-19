@@ -1,0 +1,11 @@
+{
+  "android": {
+    "release": {
+      "keystore": "./mykitchen-release-key.keystore",
+      "storePassword": "your_keystore_password",
+      "alias": "mykitchen",
+      "password": "your_alias_password",
+      "keystoreType": ""
+    }
+  }
+}
