@@ -52,5 +52,5 @@
     <!-- Removed problematic plugins that cause browser errors -->
     
     <!-- Content Security Policy -->
-    <meta-data android:name="android.webkit.WebView.MetricsOptOut" android:value="true" />
+    <!-- Removed problematic meta-data element for better compatibility -->
 </widget>
